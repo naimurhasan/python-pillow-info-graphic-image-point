@@ -44,8 +44,30 @@ for line in textwrap.wrap(txt, width=50):
 # draw point
 # draw.rectangle(((700, 618), (1403, 760)), fill="black")
 
+
+# profile pic
+
+def square_crop_image(image):
+    width, height = image.size
+    if width == height:
+        return image
+    offset  = int(abs(height-width)/2)
+    if width>height:
+        image = image.crop([offset,0,width-offset,height])
+    else:
+        image = image.crop([0,offset,width,height-offset])
+    return image
+
+# before pasting image make image pasting area
+draw.rectangle(((1487, 610), (1587, 720)), fill="#fbfbfd")
+
+pp = Image.open("profile-pic.jpeg")
+pp = square_crop_image(pp)
+pp = pp.resize((120, 120))
+img.paste(pp, (1487, 610))
+
 # This method will show image in any image viewer 
-img.save('generated.png')
-# img.show()
+# img.save('generated.png')
+img.show()
 
 print('COMPLETE')
