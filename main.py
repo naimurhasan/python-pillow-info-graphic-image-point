@@ -66,6 +66,13 @@ pp = square_crop_image(pp)
 pp = pp.resize((120, 120))
 img.paste(pp, (1487, 610))
 
+# second point achiver distance calculate
+txt = "Ariful Islam Arifin"
+factor = 350
+for i in range(1, 5):
+    draw.text((700, 500+(factor*i)), txt,(151, 193, 94), font=namefont)
+    draw.text((700, 500+(factor*i)), txt,(151, 193, 94), font=namefont)
+
 # This method will show image in any image viewer 
 # img.save('generated.png')
 img.show()

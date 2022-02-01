@@ -6,7 +6,7 @@ points = [
         'explanation': 15,
         'subject': 785,
         'refer': 0,
-        'image': None,
+        'image': 'profile-pic.jpeg',
     },
     {
         'name': 'পিপীলিকা পাঠান',
