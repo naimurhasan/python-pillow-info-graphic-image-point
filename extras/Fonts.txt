@@ -1,0 +1,9 @@
+Fonts used in this design:
+
+Font: Bebas Neue
+Author: Ryoichi Tsunekawa
+Url: https://fonts.google.com/specimen/Bebas+Neue
+
+Font: Lato
+Author: Łukasz Dziedzic
+Url: https://fonts.google.com/specimen/Lato
