@@ -1,51 +1,17 @@
 from os import name
 from PIL import Image, ImageFont, ImageDraw
 import textwrap
-  
-# open method used to open different extension image file
-img = Image.open("point-bg.png") 
+from points import points
 
-draw = ImageDraw.Draw(img)
-
-
-# write name
-fontsize = 80
-namefont = ImageFont.truetype("kalpurush.ttf", fontsize)
-# portion of image width you want text width to be
-blank = Image.new('RGB',(700, 150))
-txt = "Ariful Islam Arifin"
-while (namefont.getsize(txt)[0] > blank.size[0]) or (namefont.getsize(txt)[1] > blank.size[1]):
-    # iterate until the text size is just larger than the criteria
-    fontsize -= 1
-    namefont = ImageFont.truetype("kalpurush.ttf", fontsize)
-draw.text((700, 500), txt,(151, 193, 94), font=namefont)
-
-# write total point
-totalpoint = 995
-txt = str(totalpoint)
-scoresize = namefont.getsize(txt)[0]
-scorestart = 1457 + ((183-scoresize)/2)
-draw.text((scorestart, 500), txt,(151, 193, 94), font=namefont)
-
-# write details
-answer = 1625
-explanation = 15
-subject = 785
-refer = 0
-txt = f"Total Point: {totalpoint}.Details:- Answer: {answer},"+\
-    f" Explanation: {explanation}, Subject: {subject},"+\
-    f" Refer: {refer}."
-detailsfont = ImageFont.truetype("kalpurush.ttf", 40)
-margin, offset = 700, 600
-for line in textwrap.wrap(txt, width=50):
-    draw.text((margin, offset), line, font=detailsfont, fill="#4a4a4a")
-    offset += detailsfont.getsize(line)[1]
-
-# draw point
-# draw.rectangle(((700, 618), (1403, 760)), fill="black")
-
-
-# profile pic
+# CONSTANTS
+colors = [
+    (151, 193, 94),
+    (249, 160, 63),
+    (241, 92, 81),
+    (111, 105, 176),
+    (63, 184, 204)
+]
+distanceFactor = 350
 
 def square_crop_image(image):
     width, height = image.size
@@ -58,23 +24,75 @@ def square_crop_image(image):
         image = image.crop([0,offset,width,height-offset])
     return image
 
-# before pasting image make image pasting area
-draw.rectangle(((1487, 610), (1587, 720)), fill="#fbfbfd")
+# open method used to open different extension image file
+img = Image.open("point-bg.png") 
+draw = ImageDraw.Draw(img)
 
-pp = Image.open("profile-pic.jpeg")
-pp = square_crop_image(pp)
-pp = pp.resize((120, 120))
-img.paste(pp, (1487, 610))
+yOffset = 500;
+for i in range(5):
+    # if list index is less than 5
+    # fillup to paint empty person
+    if len(points)>=i:
+        # break
+        points.append({
+                'name': None,
+                'point': None,
+                'answer': None,
+                'explanation': None,
+                'subject': None,
+                'refer': None,
+                'image': None,
+        })
+    
+    # write name
+    fontsize = 80
+    namefont = ImageFont.truetype("kalpurush.ttf", fontsize)
+    # portion of image width you want text width to be
+    blank = Image.new('RGB',(700, 150))
+    txt = points[i]['name']  or 'You can do it!'
+    while (namefont.getsize(txt)[0] > blank.size[0]) or (namefont.getsize(txt)[1] > blank.size[1]):
+        # iterate until the text size is just larger than the criteria
+        fontsize -= 1
+        namefont = ImageFont.truetype("kalpurush.ttf", fontsize)
+    draw.text((700, yOffset), txt, colors[i], font=namefont)
 
-# second point achiver distance calculate
-txt = "Ariful Islam Arifin"
-factor = 350
-for i in range(1, 5):
-    draw.text((700, 500+(factor*i)), txt,(151, 193, 94), font=namefont)
-    draw.text((700, 500+(factor*i)), txt,(151, 193, 94), font=namefont)
+    # write total point
+    totalpoint = points[i]['point'] or ''
+    txt = str(totalpoint)
+    pointfont = ImageFont.truetype("kalpurush.ttf", 80)
+    scoresize = pointfont.getsize(txt)[0]
+    scorestart = 1457 + ((183-scoresize)/2)
+    draw.text((scorestart, yOffset), txt, colors[i], font=pointfont)
 
-# This method will show image in any image viewer 
+    # write details
+    if points[i]['answer'] != None:
+        answer = points[i]['answer']
+        explanation = points[i]['explanation']
+        subject = points[i]['subject']
+        refer = points[i]['refer']
+        txt = f"Total Point: {totalpoint}.Details:- Answer: {answer},"+\
+            f" Explanation: {explanation}, Subject: {subject},"+\
+            f" Refer: {refer}."
+        detailsfont = ImageFont.truetype("kalpurush.ttf", 40)
+        margin, offset = 700, yOffset+100
+        for line in textwrap.wrap(txt, width=50):
+            draw.text((margin, offset), line, font=detailsfont, fill="#4a4a4a")
+            offset += detailsfont.getsize(line)[1]
+
+    # profile pic
+    if points[i]['image'] != None:
+        # before pasting image make image pasting area
+        draw.rectangle(((1487, yOffset+110), (1587, yOffset+220)), fill="#fbfbfd")
+
+        pp = Image.open("profile-pic.jpeg")
+        pp = square_crop_image(pp)
+        pp = pp.resize((120, 120))
+        img.paste(pp, (1487, yOffset+110))
+
+    yOffset += distanceFactor
+
 # img.save('generated.png')
+# This method will show image in any image viewer 
 img.show()
 
 print('COMPLETE')
